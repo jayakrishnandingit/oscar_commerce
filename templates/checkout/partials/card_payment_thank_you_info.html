@@ -1,0 +1,6 @@
+{% load i18n %}
+{% blocktrans with number=order.number %}
+Your order has been placed and a confirmation email has been sent - your order number is
+<strong>{{ number }}</strong>.
+{% endblocktrans %}
+{% trans "Please make a note of this reference or print this page and quote it in any communication with us regarding your order." %}

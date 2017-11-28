@@ -1,0 +1,8 @@
+syntax: glob
+*.pyc
+*.sqlite3
+*.log
+*.blob
+settings.py
+media/
+scripts/django.wsgi

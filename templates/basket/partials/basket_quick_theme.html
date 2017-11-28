@@ -1,0 +1,46 @@
+{% load history_tags %}
+{% load basket_tags %}
+{% load currency_filters %}
+{% load thumbnail %}
+{% load i18n %}
+{% load staticfiles %}
+
+<div class="top-cart-content">
+    <div class="top-cart-title">
+        <h4>{% trans "Basket" %}</h4>
+    </div>
+    <div class="top-cart-items">
+        {% if request.basket.num_lines %}
+            {% for line in request.basket.all_lines %}
+                <div class="top-cart-item clearfix">
+                    <div class="top-cart-item-image">
+                        {% with image=line.product.primary_image %}
+                            {% thumbnail image.original "100x100" upscale=False as thumb %}
+                                <a href="{{ line.product.get_absolute_url }}"><img class="thumbnail" src="{{ thumb.url }}" alt="{{ line.product.get_title }}"></a>
+                            {% endthumbnail %}
+                        {% endwith %}
+                    </div>
+                    <div class="top-cart-item-desc">
+                        <a href="{{ line.product.get_absolute_url }}">{{ line.description }}</a>
+                        <span class="top-cart-item-price">{{ line.unit_price_excl_tax|currency:request.basket.currency }}</span>
+                        <span class="top-cart-item-quantity"><strong>{% trans "Qty" %}</strong> {{ line.quantity }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>{% trans "Your basket is empty." %}</p>
+        {% endif %}
+    </div>
+    {% if request.basket.num_lines %}
+        <div class="top-cart-action clearfix">
+            <span class="fleft top-checkout-price">
+                {% if request.basket.is_tax_known %}
+                    {{ request.basket.total_incl_tax|currency:request.basket.currency }}
+                {% else %}
+                    {{ request.basket.total_excl_tax|currency:request.basket.currency }}
+                {% endif %}
+            </span>
+            <button class="button button-3d button-small nomargin fright"><a href="{% url 'basket:summary' %}">{% trans "View Basket" %}</a></button>
+        </div>
+    {% endif %}
+</div>

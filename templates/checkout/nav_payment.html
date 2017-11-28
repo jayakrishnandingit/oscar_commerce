@@ -1,0 +1,49 @@
+{% load i18n %}
+
+<div class="navbar navbar-static-top navbar-inverse nav-checkout">
+    <ul class="nav navbar-nav">
+        {% spaceless %}
+            <li class="step1 {% if step == 1 %}active{% else %}{% if step == 2 %}previous{% else %}{% if step > 1 %}visited{% else %}disabled{% endif %}{% endif %}{% endif %} ">
+                {% if step == 2 %}
+                    <a href="{% url 'checkout:payment-method' order.number %}">
+                        <span class="visible-inline-sm icon-chevron-right"></span>
+                        <span>
+                            {% trans "1. Payment method" %}
+                        </span>
+                    </a>
+                {% else %}
+                    <span class="navbar-text">
+                        {%  trans "1. Payment method" %}
+                    </span>
+                {% endif %}
+            </li>
+
+            <li class="step2 {% if step == 2 %}active{% else %}{% if step == 3 %}previous{% else %}{% if step > 2 %}visited{% else %}disabled{% endif %}{% endif %}{% endif %} ">
+                {% if step == 3 %}
+                    <a href="{% url 'checkout:payment-details' order.number %}">
+                        <span class="visible-inline-sm icon-chevron-right"></span>
+                        <span>
+                            {% trans "2. Payment" %}
+                        </span>
+                    </a>
+                {% else %}
+                    <span class="navbar-text">
+                        {%  trans "2. Payment" %}
+                    </span>
+                {% endif %}
+            </li>
+
+            <li class="step3 {% if step == 3 %}active{% else %}disabled{% endif %} ">
+                <span class="navbar-text">
+                    {% trans "3. Final Preview" %}
+                </span>
+            </li>
+
+            <li class="step4 {% if step == 4 %}active{% else %}disabled{% endif %} ">
+                <span class="navbar-text">
+                    {% trans "4. Final Confirmation" %}
+                </span>
+            </li>
+        {% endspaceless %}
+    </ul><!-- /navbar-inner -->
+</div><!-- /navbar -->

@@ -1,0 +1,55 @@
+{% extends "oscar/basket/partials/basket_totals.html" %}
+
+{% load i18n %}
+{% load currency_filters %}
+{% load shipping_tags %}
+{% load purchase_info_tags %}
+
+{% block tax_totals %}
+    {% if show_tax_separately and basket.is_tax_known and basket.taxes|length > 0 %}
+        <tr>
+            <th>&nbsp;</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <h3>{% trans "Tax" %}</h3>
+            </th>
+        </tr>
+        {% for each_tax in basket.taxes %}
+            <!-- List of namedtuple each containing a title and amount attribute. -->
+            <tr>
+                <th class="total">
+                    {{ each_tax.title }}
+                </th>
+                <th class="total align-right">
+                    {{ each_tax.amount|currency:basket.currency }}
+                </th>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block order_total %}
+    <tr>
+        <th>&nbsp;</th>
+        <td></td>
+    </tr>
+    <tr>
+        <th class="total"><h3>{% trans "Order total" %}</h3></th>
+        <td class="total align-right">
+            <h3 class="price_color">
+                {% if order_total.is_tax_known %}
+                    {{ order_total.incl_tax|currency:basket.currency }}
+                {% else %}
+                    {{ order_total.excl_tax|currency:basket.currency }}
+                {% endif %}
+            </h3>
+        </td>
+    </tr>
+    {% if not order_total.is_tax_known %}
+        <tr>
+            <td><small>{% trans "Taxes will be added during payment." %}</small></td>
+        </tr>
+    {% endif %}
+{% endblock %}

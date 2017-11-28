@@ -1,0 +1,7 @@
+{% extends "oscar/base.html" %}
+{% load staticfile_versioning %}
+
+{% block favicon %}
+	<link rel="shortcut icon" href="{% staticfile 'img/favicon.ico' %}" type="image/x-icon" />
+{% endblock %}
+{% block body_class %}stretched{% endblock %}

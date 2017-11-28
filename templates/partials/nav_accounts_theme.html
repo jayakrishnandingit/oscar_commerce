@@ -1,0 +1,61 @@
+{% load i18n %}
+{% load category_tags %}
+<header id="header">
+
+    <div id="header-wrap">
+
+        <div class="container clearfix">
+
+            <div id="primary-menu-trigger"><i class="icon-reorder"></i></div>
+
+            <!-- Logo
+            ============================================= -->
+            <div id="logo">
+                {% include "oscar/partials/brand.html" %}
+            </div><!-- #logo end -->
+
+            <!-- Primary Navigation
+            ============================================= -->
+            <nav id="primary-menu">
+
+                <ul>
+                    <li class="current"><a href="{{ homepage_url }}"><div>Home</div></a></li>
+                    {% category_tree depth=2 as tree_categories %}
+                    {% if tree_categories %}
+                        {% for tree_category, info in tree_categories %}
+                            {% if info.level == 0 %}
+                            {# we only show root level categories in top menu. #}
+                                <li>
+                                    <a href="{{ tree_category.get_absolute_url }}">
+                                        <div>{{ tree_category.name }}</div>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <li><a href="/{{LANGUAGE_CODE}}/contact/"><div>Contact</div></a></li>
+                </ul>
+
+                <!-- Top Cart
+                ============================================= -->
+                <div id="top-cart">
+                    {# Mini-basket wrapped in a block so some templates can now display it #}
+                    {% block mini_basket %}{% include "partials/mini_basket.html" %}{% endblock %}
+                </div><!-- #top-cart end -->
+
+                <!-- Top Search
+                ============================================= -->
+                <div id="top-search">
+                    <a href="#" id="top-search-trigger"><i class="icon-search3"></i><i class="icon-line-cross"></i></a>
+                    <form action="{% url 'search:search' %}" method="get">
+                        <input type="text" name="q" class="form-control" value="" placeholder="Type &amp; Hit Enter..">
+                    </form>
+                </div><!-- #top-search end -->
+
+            </nav><!-- #primary-menu end -->
+
+        </div>
+
+    </div>
+
+</header><!-- #header end -->

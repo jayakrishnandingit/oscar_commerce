@@ -1,0 +1,118 @@
+{% load i18n %}
+{% load category_tags %}
+<nav class="navbar navbar-default bg-white navbar-fixed-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {% include "partials/brand.html" %}
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav increased-padding-links">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans "Buy" %} <span class="caret"></span></a>
+          {% category_tree depth=2 as tree_categories %}
+          <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'catalogue:index' %}">
+                    <div>{% trans "All Products" %}</div>
+                </a>
+            </li>
+            <li role="separator" class="divider"></li>
+            {% if tree_categories %}
+              {% for tree_category, info in tree_categories %}
+                {% if info.level == 0 %}
+                  {# we only show root level categories in top menu. #}
+                      <li>
+                          <a href="{{ tree_category.get_absolute_url }}">
+                              <div>{{ tree_category.name }}</div>
+                          </a>
+                      </li>
+                  {% endif %}
+              {% endfor %}
+            {% else %}
+              <li><a href="#">{% trans "No Categories Found" %}</a></li>
+            {% endif %}
+          </ul>
+        </li>
+      </ul>
+      <form action="{% url 'search:search' %}" class="navbar-form navbar-left increased-margin-top">
+        <div class="form-group">
+          <input type="text" class="form-control" name="q" placeholder="Search">
+        </div>
+      </form>
+      <ul class="nav navbar-nav navbar-right increased-padding-links">
+        {# Mini-basket wrapped in a block so some templates can now display it #}
+        {% block mini_basket %}{% include "partials/mini_basket.html" %}{% endblock %}
+        {% if LANGUAGES|length > 1 %}
+          {% get_current_language as LANGUAGE_CODE %}
+          <li class="dropdown language-select-dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              {% if LANGUAGE_CODE == 'en' %}
+                <span class="flag-icon flag-icon-us"></span>&nbsp;&nbsp;<b class="caret"></b>
+              {% else %}
+                <span class="flag-icon flag-icon-{{LANGUAGE_CODE}}"></span>&nbsp;&nbsp;<b class="caret"></b>
+              {% endif %}
+            </a>
+            <ul class="dropdown-menu">
+              {% get_available_languages as LANGUAGES %}
+              {% get_language_info_list for LANGUAGES as languages %}
+              {% for language in languages %}
+                <li>
+                  <a href="javascript:void(0);" data-lang-code="{{language.code}}">
+                    {% if language.code == 'en' %}
+                      <span class="flag-icon flag-icon-us"></span>
+                    {% else %}
+                      <span class="flag-icon flag-icon-{{language.code}}"></span>
+                    {% endif %}
+                    &nbsp;{{language.name_local}}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% endif %}
+        {% if user.is_authenticated %}
+          <li>
+              {% if num_unread_notifications > 0 %}
+              {# If user has new notifications - we change account link to go to inbox #}
+                  <a href="{% url 'customer:notifications-inbox' %}">
+                      <i class="icon-user"></i>
+                      {% trans "Account" %}
+                      <span class="label label-important">{{ num_unread_notifications }}</span>
+                  </a>
+              {% else %}
+                  <a href="{% url 'customer:summary' %}"><i class="icon-user"></i> {% trans "Account" %}</a>
+              {% endif %}
+          </li>
+          {% if user.is_staff or perms.partner.dashboard_access %}
+              <li>
+                  <a href="{% url 'dashboard:index' %}"><i class="icon-list-ul"></i> {% trans "Dashboard" %}</a>
+              </li>
+          {% endif %}
+          <li>
+              <a id="logout_link" href="{% url 'customer:logout' %}"><i class="icon-signout"></i> {% trans "Logout" %}</a>
+          </li>
+      {% else %}
+          <li>
+              <a id="login_link" href="{% url 'customer:login' %}"><i class="icon-signin"></i> {% trans "Login or register" %}</a>
+          </li>
+      {% endif %}
+      </ul>
+      {% if LANGUAGES|length > 1 %}
+        {% get_current_language as LANGUAGE_CODE %}
+        <form id="id_language_select_form" class="navbar-form navbar-right increased-margin-top" action="{% url 'set_language' %}" method="POST">
+          {% csrf_token %}
+          <input id="id_language" name="language" type="hidden" value="{{LANGUAGE_CODE}}" />
+        </form>
+      {% endif %}
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

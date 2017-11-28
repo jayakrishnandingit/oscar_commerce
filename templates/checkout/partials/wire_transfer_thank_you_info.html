@@ -1,0 +1,5 @@
+{% load i18n %}
+{% blocktrans with number=order.number status=order.status %}
+Your order <strong>{{ number }}</strong> will remain in {{status}} status. Order processing and dispatch will commence once your payment is credited in our bank.
+{% endblocktrans %}
+{% trans "Please make a note of this reference or print this page and quote it in any communication with us regarding your order." %}

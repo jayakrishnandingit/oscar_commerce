@@ -1,0 +1,36 @@
+{% load i18n %}
+<div class="well">
+    <div class="row">
+        <button id="search-toggler" type="button" data-toggle="collapse" data-target="#search-form-container" class="btn btn-default pull-right hidden-md hidden-lg">
+            <b><span id="search-toggler-text">{% trans "Show search filter" %}</span>&nbsp;&nbsp;<i class="fa fa-angle-double-down"></i></b>
+        </button>
+    </div>
+    <div id="search-form-container" class="collapse in">
+        <ul class="nav nav-list row">
+            <li class="nav-header"><b>{{search_form.grade.label}}</b></li>
+            <li>
+                <div class="col-md-12">
+                    <div class="checkbox">
+                        {{search_form.grade}}
+                        {{search_form.q}}
+                        <!-- Hack to get the sort_by on change on form submission.
+                            sort_by is placed outsdide of this form.
+                        -->
+                        <input type="hidden" name="sort_by">
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <br clear="all" />
+        <ul class="nav nav-list row">
+            <li class="nav-header"></li>
+            <li>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="submit" id="search-btn" class="btn btn-primary btn-block">{% trans "Search" %}&nbsp;<i class="fa fa-angle-double-right"></i></button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

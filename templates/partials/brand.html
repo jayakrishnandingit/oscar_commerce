@@ -1,0 +1,7 @@
+{% load staticfile_versioning %}
+<a class="navbar-brand reduced-padding auto-height" href="{{ homepage_url }}">
+	{% block brand_title %}
+		<img class="img-responsive" src="{% staticfile 'img/logo_77x60.png' %}" alt="{{ shop_name }}" />
+		<small> {{ shop_tagline }}</small>
+	{% endblock %}
+</a>

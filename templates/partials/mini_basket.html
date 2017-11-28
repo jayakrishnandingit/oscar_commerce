@@ -1,0 +1,12 @@
+{% load currency_filters %}
+{% load i18n %}
+
+<li>
+    <a href="{% url 'basket:summary' %}" title="{% trans 'View basket' %}">
+        {% trans "Basket" %}
+        <i class="icon-shopping-cart"></i>
+        <span class="label label-primary">
+            {{request.basket.num_lines}}
+        </span>
+    </a>
+</li>

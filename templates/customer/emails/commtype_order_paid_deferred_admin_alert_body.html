@@ -1,0 +1,7 @@
+{% extends "customer/emails/base_admin.html" %}
+{% load currency_filters i18n %}
+{% block body %}
+	<p>Customer has requested {{payment_method.name}} for Order {{order.number}} with Order Total: {{ order.total_incl_tax|currency:order.currency }} on {% now "Y-m-d P" %}.</p>
+
+	<p>View and update on at {{dashboard_order_link}}.</p>
+{% endblock %}

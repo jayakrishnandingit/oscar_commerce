@@ -1,0 +1,32 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block body %}<p xmlns="http://www.w3.org/1999/html">{% trans 'Hello,' %}</p>
+
+<p>{% blocktrans with order_number=order.number %}We are pleased to inform that, your order {{ order_number }} has been approved. We kindly ask you to do the payment as soon as possible. Once we receive your payment we start processing your order for dispatch.{% endblocktrans %}</p>
+
+{% if order_payment_link %}
+<p>{% blocktrans %}You can do payment for this order <a href="{{ order_payment_link }}" title="order payment">here</a>.{% endblocktrans %}</p>
+<p>{% blocktrans %}Please note, additional fee may apply according to the payment method you choose.{% endblocktrans %}</p>
+{% endif %}
+
+<p>{% trans 'Your order contains:' %}</p>
+
+<ul>
+    {% for line in order.lines.all %}
+    <li>{{ line.title }} - {%  trans 'quantity:' %} {{ line.quantity }} - {% trans 'price:' %} {{ line.line_price_incl_tax|currency:order.currency }}</li>
+    {% endfor %}
+</ul>
+<p>
+{% trans 'Basket total:' %} {{ order.basket_total_incl_tax|currency:order.currency }}<br/>
+{% trans 'Shipping:' %} {{ order.shipping_incl_tax|currency:order.currency }}<br/>
+{% trans 'Order Total:' %} {{ order.total_incl_tax|currency:order.currency }}
+</p>
+
+<p>{% trans 'Shipping address:' %}</p>
+<p>{% for field in order.shipping_address.active_address_fields %}  {{ field }}<br/>
+{% endfor %}</p>{% endblock %}
+
+{% block footer %}
+<p>{% trans "Thank you for your order." %}</p>
+<p>{% blocktrans with name=site.name %}The {{ name }} team{% endblocktrans %}</p>{% endblock %}

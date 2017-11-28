@@ -1,0 +1,4 @@
+{% load currency_filters i18n %}{% block body %}
+Customer has requested {{payment_method.name}} for Order {{order.number}} with Order Total: {{ order.total_incl_tax|currency:order.currency }} on {% now "Y-m-d P" %}.
+
+View and update on at {{dashboard_order_link}}.{% endblock %}

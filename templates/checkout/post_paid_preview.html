@@ -1,0 +1,158 @@
+{% extends "oscar/checkout/preview.html" %}
+{% load i18n %}
+{% load currency_filters %}
+{% load thumbnail %}
+{% load purchase_info_tags %}
+
+{% block checkout_nav %}
+    {% include 'checkout/nav.html' with step=3 %}
+{% endblock %}
+
+{% block shipping_address %}
+    <!-- Since payment_method block is empty, we can span the shipping_address block to full width.
+    This helps in reduced height in preview and more legible for buyers. -->
+    <div class="col-sm-12">
+        <div class="sub-header">
+            <h2>{% trans "Shipping" %}</h2>
+        </div>
+        {% if shipping_address %}
+            <div class="col-sm-6">
+                <div class="well well-info">
+                    {% block shipping_address_actions %}
+                        <a href="{% url 'checkout:shipping-address' %}" class="pull-right">
+                            {% trans "Change" %}
+                        </a>
+                    {% endblock %}
+                    <h3>{% trans "Address" %}</h3>
+                    <address>
+                        {% for field in shipping_address.active_address_fields %}
+                            {{ field }}<br/>
+                        {% endfor %}
+                    </address>
+
+                    {% if shipping_address.phone_number %}
+                        <h4>{% trans "Contact" %}</h4>
+                        <p>
+                            {% trans "Phone" %}: {{ shipping_address.phone_number }}
+                            {% if guest_email %}
+                                <br/>{% trans "Email" %}: {{ guest_email }}
+                            {% endif %}
+                        </p>
+                    {% endif %}
+
+                    {% if shipping_address.notes %}
+                        <h4>{% trans "Instructions" %}</h4>
+                        <p>{{ shipping_address.notes|linebreaks }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if shipping_method %}
+            <div class="col-sm-6">
+                <div class="well well-info">
+                    {% block shipping_method_actions %}
+                        <a href="{% url 'checkout:shipping-method' %}" class="pull-right">
+                            {% trans "Change" %}
+                        </a>
+                    {% endblock %}
+                    <h3>{% trans "Shipping method" %}</h3>
+                    <p>{{ shipping_method.name }}
+                        {% if shipping_method.description %}
+                            - {{ shipping_method.description|safe }}
+                        {% endif %}
+                    </p>
+
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock shipping_address %}
+
+{% block payment_method %}
+{% endblock payment_method %}
+
+{% block order_contents %}
+    <div class="sub-header">
+        {% block order_contents_actions %}
+            <a href="{% url 'basket:summary' %}" class="pull-right">
+                {% trans "Edit order contents" %}
+            </a>
+        {% endblock %}
+
+        <h2>{% trans "Order contents" %}</h2>
+    </div>
+    <div class="basket-title">
+        <div class="row">
+            <p class="col-sm-9 h4">{% trans "Item" %}</p>
+            <p class="col-sm-1 h4 align-center">{% trans "Quantity" %}</p>
+            <p class="col-sm-2 h4 align-right">{% trans "Total" %}</p>
+        </div>
+    </div>
+    {% for line in basket.all_lines %}
+        {% purchase_info_for_line request line as session %}
+        <div class="basket-items">
+            <div class="row">
+                <div class="col-sm-2">
+                    {% with image=line.product.primary_image %}
+                        {% thumbnail image.original "100x100" upscale=False as thumb %}
+                        <a href="{{ form.instance.product.get_absolute_url }}"><img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}"></a>
+                        {% endthumbnail %}
+                    {% endwith %}
+                </div>
+                <div class="col-sm-7">
+                    <h3><a href="{{ line.product.get_absolute_url }}">{{ line.description }}</a></h3>
+                    <span class="availability {{ session.availability.code }}">{{ session.availability.message }}</span>
+                </div>
+                <div class="col-sm-1 align-center">
+                    {{ line.quantity }}
+                </div>
+                <div class="col-sm-2 align-right">
+                    <p class="price_color">
+                        {% if not show_tax_separately and line.is_tax_known %}
+                            {{ line.line_price_incl_tax|currency:basket.currency }}
+                        {% else %}
+                            {{ line.line_price_excl_tax|currency:basket.currency }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-sm-6">&nbsp;</div>
+        <div class="col-sm-6">
+            <div class="sub-header">
+                <h2>{% trans 'Totals' %}</h2>
+            </div>
+            {% include 'basket/partials/basket_totals.html' %}
+        </div>
+    </div>
+
+{% endblock order_contents %}
+
+{% block place_order %}
+    <form method="post" action="{% url 'checkout:post-paid-order' %}" id="place_order_form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="place_post_paid_order" />
+
+        {% comment %}
+            When submitting sensitive data on the payment details page (eg a bankcard)
+            we don't want to save the data and so we pass the bound form to the preview
+            template and render it in a hidden div.  Then the payment information will
+            get re-submitted when the user confirms the order.
+        {% endcomment %}
+        <div style="display:none">
+            {% block hiddenforms %}{% endblock %}
+        </div>
+
+        <div class="form-group clearfix">
+            <div class="row">
+                <div class="col-sm-3 col-sm-offset-9">
+                     <button id='place-order' type="submit" class="btn btn-primary btn-lg btn-block" data-loading-text="{% trans 'Submitting...' %}">{% trans "Submit" %}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock place_order %}

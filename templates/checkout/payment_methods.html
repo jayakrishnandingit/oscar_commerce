@@ -1,0 +1,55 @@
+{% extends "checkout/checkout.html" %}
+
+{% load currency_filters %}
+{% load i18n %}
+{% load payment_tags %}
+
+{% block title %}
+    {% trans "Payment method" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'checkout/nav_payment.html' with step=1 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Payment method" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+{% block shipping_address %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+
+{% block payment_method %}
+    <div class="basket-title">
+        <div class="row">
+            <h4 class="col-sm-8">{% trans "Method" %}</h4>
+            <h4 class="col-sm-3">{% trans "Additional Cost" %}</h4>
+        </div>
+    </div>
+    {% for method in methods %}
+        <div class="basket-items">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h4>{{ method.name }}</h4>
+                    {% if method.description %}
+                        <p>{{ method.description|safe }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-sm-1">
+                    {% payment_charge method order as charge %}
+                    {% if charge.is_tax_known %}
+                        {{ charge.incl_tax|currency:order.currency }}
+                    {% else %}
+                        {{ charge.excl_tax|currency:order.currency }}
+                    {% endif %}
+                </div>
+                <div class="col-sm-3">
+                    <form method="post" action="{% url 'checkout:payment-method' order.number %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="method_code" value="{{ method.code }}" />
+                        <button type="submit" class="btn btn-lg btn-primary pull-right" data-loading-text="{% trans 'Submitting...' %}">{% trans "Select option" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock payment_method %}

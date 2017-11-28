@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load promotion_tags %}
+
+{% block styles %}
+    <!-- Stylesheets
+    ============================================= -->
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'oscar/css/styles.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/flag-icon.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/cellagain.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/cellagain_theme.css' %}" type="text/css" />
+    <style type="text/css">
+        /* Including inline style for very small styling
+         * This helps in page speed and avoid rendsering blocking CSS.
+         */
+        /* Sticky footer styles
+        -------------------------------------------------- */
+        html {
+          position: relative;
+          min-height: 100%;
+        }
+        body {
+          /* Margin bottom by footer height */
+          margin-bottom: 60px;
+        }
+        .footer {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          /* Set the fixed height of the footer here */
+          height: 60px;
+          background-color: #E0E0E0;
+        }
+        @media (max-width:800px) {
+          .footer {
+            height: 70px;
+          }
+        }
+    </style>
+{% endblock %}
+
+{% block layout %}
+    <div id="wrapper" class="clearfix">
+        {% include "lockdown/nav_accounts.html" %}
+
+        {# Main content of page - other layout templates may override this block #}
+        {% block content_wrapper %}
+            <div class="container-fluid page">
+                <div class="page_inner">
+                    <div class="page-header action">
+                        <h1>{% block headertext %}{% endblock %}</h1>
+                    </div>
+                    <div class="container">
+                        {# Div exists for AJAX updates to entire content section #}
+                        <div id="content_inner">{% block content %}{% endblock %}</div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+        {% include "partials/footer.html" %}
+    </div>
+{% endblock %}
+
+{% block cdn_scripts %}
+{% endblock %}
+
+{# Local scripts #}
+{% block scripts %}
+{% endblock %}
+
+{% block extrascripts %}
+{% endblock %}
+
+{% block onbodyload %}
+{% endblock %}

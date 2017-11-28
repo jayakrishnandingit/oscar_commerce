@@ -1,0 +1,19 @@
+{% extends "oscar/basket/partials/basket_content.html" %}
+
+{% load i18n %}
+{% load common_tags %}
+
+{% block formactions %}
+    <div class="form-group clearfix">
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-8">
+            	{% if basket.num_items < min_basket_qty_required %}
+            		{% subtract min_basket_qty_required basket.num_items as items_required_for_checkout %}
+                	<a href="{% url 'checkout:index' %}" class="btn btn-lg btn-primary btn-block disabled" disabled>{% blocktrans %}<b>Add {{items_required_for_checkout}} more item(s) to check inventory</b> {% endblocktrans %}</a>
+            	{% else %}
+            		<a href="{% url 'checkout:index' %}" class="btn btn-lg btn-primary btn-block">{% trans "Submit to check inventory" %}</a>
+            	{% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock formactions %}

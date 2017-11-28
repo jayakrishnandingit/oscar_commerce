@@ -1,0 +1,27 @@
+a {
+	color: #42816C;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #42817D;
+}
+
+.label-primary {
+	background-color: #42816C;
+}
+
+.btn-primary {
+	color: #fff;
+	background-color: #42816C;
+	border-color: #42817D;
+}
+
+.btn-primary:hover {
+	color: #fff;
+	background-color: #42817D;
+}
+
+.price_color, .product_pod .price_color, .basket-items .price_color {
+	color: #428bca;
+}

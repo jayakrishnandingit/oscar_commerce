@@ -1,0 +1,4 @@
+{% load currency_filters i18n %}{% block body %}
+An order {{order.number}} with Order Total: {{ order.total_incl_tax|currency:order.currency }} has been placed on {{order.date_placed}}.
+
+View and update on at {{dashboard_order_link}}.{% endblock %}

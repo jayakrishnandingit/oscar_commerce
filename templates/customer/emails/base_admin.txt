@@ -1,0 +1,7 @@
+{% load i18n %}{% block header %}Hi,{% endblock %}
+
+{% block body %}{% endblock %}
+
+{% block footer %}
+{{ site.name }}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "lockdown/layout.html" %}
+{% load i18n %}
+
+{% block headertext %}
+	<div class="text-center center-block">{{ lockdown_message_header|safe }}</div>
+{% endblock %}
+{% block content %}
+	<div class="text-center center-block">{{ lockdown_message|safe }}</div>
+
+	{% if form %}
+	  <form action="" method="post">{% csrf_token %}
+	    {{ form.as_p }}
+	    <p><input type="submit" value="Preview" /></p>
+	  </form>
+	{% endif %}
+{% endblock %}

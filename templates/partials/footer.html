@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<footer class="footer">
+	{% block footer %}
+		<div class="container">
+	        <div class="col-md-12 footer-area">
+		        <div class="col-md-6 col-sm-12 col-xs-12">{% trans "Copyright" %} &copy; {% now "Y" %}. {% blocktrans %}All Rights Reserved by {{shop_name}}.{% endblocktrans %}</div>
+		        <!-- <div class="col-md-6 col-sm-12 col-xs-12 social-icons">
+		            <div class="col-sm-1 col-xs-2">
+		                <a href="https://www.facebook.com/Celularesbaratoscomdo-1549145132071357/" title="Marque un LIKE en Facebook.">
+		                    <i class="fa fa-facebook"></i>
+		                </a>
+		            </div>
+		            <div class="col-sm-1 col-xs-2">
+		                <a href="https://twitter.com/celularbaratoRD" title="Tuiteanos en Twitter.">
+		                    <i class="fa fa-twitter"></i>
+		                </a>
+		            </div>
+		            <div class="col-sm-1 col-xs-2">
+		                <a href="https://plus.google.com/u/0/115812079363505364546/posts?hl=es" title="+1 en Google Plus.">
+		                    <i class="fa fa-google-plus"></i>
+		                </a>
+		            </div>
+		            <div class="col-sm-1 col-xs-2">
+		                <a href="https://www.youtube.com/channel/UCcL5rP8SVZH4PxH3BqwIU_w" title="Subscribite a nuestro canal de YouTube.">
+		                    <i class="fa fa-youtube"></i>
+		                </a>
+		            </div>
+		            <div class="col-sm-1 col-xs-2">
+		                <a href="https://www.instagram.com/celularesbaratos.do/" title="Visitanos en Instagram.">
+		                    <i class="fa fa-instagram"></i>
+		                </a>
+		            </div>
+		        </div> -->
+	        </div>
+	    </div>
+	{% endblock %}
+</footer>

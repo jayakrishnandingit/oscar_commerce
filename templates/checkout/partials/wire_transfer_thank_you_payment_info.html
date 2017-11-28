@@ -1,0 +1,25 @@
+{% load currency_filters %}
+{% load thumbnail %}
+{% load i18n %}
+{% load staticfiles %}
+
+<div class="sub-header">
+    <h2>{% trans "Payment" %}</h2>
+</div>
+<div class="well well-success">
+    <h3>{% trans "Payment" %}</h3>
+    <p>
+        {% trans "You had opted for " %} <b>{{order.payment_method.name}}</b>
+    </p>
+    <p>{{order.payment_method.description|safe}}</p>
+    <p>{{wiretransfer_details|safe}}</p>
+
+    {% if order.billing_address %}
+        <h4>{% trans "Billing address" %}</h4>
+        <address>
+            {% for field in order.billing_address.active_address_fields %}
+                {{ field }}<br/>
+            {% endfor %}
+        </address>
+    {% endif %}
+</div>

@@ -1,0 +1,54 @@
+{% load i18n %}
+{% load currency_filters %}
+<div class="col-md-8 col-md-offset-2 col-xs-12 col-sm-12">
+    <div class="well well-blank">
+        <form id="checkout-form-id" name="checkout-form" class="panel-body" action="{% url 'checkout:preview' order.number %}" method="post" autocomplete="off">
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{error}}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% csrf_token %}
+            <div class="row">
+                <div class="form-group col-xs-12">
+                    <span class="help-block">You will be billed {{ order_total.incl_tax|currency:order.currency }} that includes a {{ payment_processing_fee_in_percent }}% charge to cover the credit card fee.</span>
+                </div>
+                <div class="form-group col-xs-8">
+                    <label class="control-label" for="card-number-element">{% trans "Card Number" %}</label>
+                    <div id="card-number-element"><!-- a Stripe Element will be inserted here. --></div>
+                    <span class="error" name="card-number"></span>
+                </div>
+                <div class="form-group col-xs-4">
+                    <div class="row">
+                        <label class="control-label col-xs-12" for="card-expiry-element">{% trans "Expiration Date" %}</label>
+                        <div class="col-xs-12">
+                            <div id="card-expiry-element"><!-- a Stripe Element will be inserted here. --></div>
+                            <span class="error" name="exp-date"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label class="control-label" for="card-cvc-element">{% trans "Security Code" %}</label>
+                    <div id="card-cvc-element"><!-- a Stripe Element will be inserted here. --></div>
+                    <span class="error" name="cvc"></span>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label class="control-label">{% trans "Zipcode" %}</label>
+                    <div id="postal-code-element"><!-- a Stripe Element will be inserted here. --></div>
+                    <span class="error" name="postal"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    {% include 'partials/form_field.html' with field=form.payment_method_nonce %}
+                    <span class="error" name="hosted-fields-all-errors"></span>
+                    <button type="submit" value="submit" id="submitBtn" disabled class="btn btn-primary btn-lg text-center center-block" data-loading-text="Please wait..">
+                        {% trans "Pay with" %} <span id="card-type">Card</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+{% extends "checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Payment details" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'checkout/nav_payment.html' with step=2 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Enter payment details" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+{% block shipping_address %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}
+
+<!-- render template according to the chosen payment method. -->
+{% block payment_details %}
+    {% block payment_details_content %}
+		{% with tmpl=payment_kwargs.method.code|add:"_details.html" %}
+			{% include "checkout/partials/"|add:tmpl %}
+		{% endwith %}
+	{% endblock payment_details_content %}
+{% endblock payment_details %}
+
+{% block extrascripts %}
+    {{ block.super }}
+	{% with tmpl=payment_kwargs.method.code|add:"_scripts.html" %}
+		{% include "checkout/partials/"|add:tmpl %}
+	{% endwith %}
+{% endblock %}

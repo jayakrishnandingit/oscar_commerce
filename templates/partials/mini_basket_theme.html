@@ -1,0 +1,10 @@
+{% load currency_filters %}
+{% load i18n %}
+
+<a href="#" id="top-cart-trigger" title="{% trans 'Basket total' %}">
+    <i class="icon-shopping-cart"></i>
+    <span>
+        {{request.basket.num_lines}}
+    </span>
+</a>
+{% include "basket/partials/basket_quick.html" %}

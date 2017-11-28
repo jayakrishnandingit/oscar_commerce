@@ -1,0 +1,11 @@
+{% extends "oscar/catalogue/partials/product.html" %}
+
+{% load reviews_tags %}
+{% load thumbnail %}
+{% load i18n %}
+{% load display_tags %}
+{% load staticfiles %}
+
+{% block product_title %}
+    <h3><a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.get_title }}</a></h3>
+{% endblock %}
